@@ -48,7 +48,10 @@ namespace Messenger {
         std::stringstream message;
         message << std::istream(&streamBuffer_).rdbuf();
         std::cout << user_name_ << " " << message.str();
-        if (message.str().find("--login--") != std::string::npos) {
+        std::stringstream name_socket;
+        name_socket << socket_.remote_endpoint();
+
+        if (message.str().substr(0, 9) == "--login--" && name_socket.str() == user_name_) {
             std::string name;
             name = message.str().substr(9, message.str().size() - 2);
             std::erase_if( name,
